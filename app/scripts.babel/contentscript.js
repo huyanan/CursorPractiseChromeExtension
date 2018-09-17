@@ -48,20 +48,43 @@ chrome.extension.onMessage.addListener(
     function(request, sender, sendResponse) {
         // alert("前端/后端/Popup收到");
         // console.log(request, sender);
-        freshPage(request.shoot);
+        freshPage(request);
         sendResponse('popup返回值');
     }
 );
 chrome.storage.sync.get('shoot', function (items) {
   console.log(items);
-  freshPage(items.shoot)
+  freshPage(items)
 });
 // createCircle();
-function freshPage (shoot) {
-  if (shoot) {
-    removeCircle();
-    createCircle();
-  } else {
-    removeCircle();
+function freshPage (request) {
+  if (request.shoot != undefined) {
+    if (request.shoot) {
+      removeCircle();
+      createCircle();
+    } else {
+      removeCircle();
+    }
+  }
+  if (request.imageHide != undefined) {
+    if (request.imageHide) {
+      toggleImage(request.imageHide);
+    } else {
+      toggleImage(request.imageHide);
+    }
+  }
+}
+
+// 隐藏显示图片
+function toggleImage(toggle) {
+  var images = document.getElementsByTagName('img');
+  var image = null;
+  for (var i = 0; i < images.length; i++) {
+    image = images[i];
+    if (toggle) {
+      image.style.display = 'none';
+    } else {
+      image.style.display = 'inline-block';
+    }
   }
 }
