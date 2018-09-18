@@ -6,8 +6,8 @@ var circle = null;
 function getRandomPos(){
   const xStart = window.scrollX;
   const yStart = window.scrollY;
-  const screenW = document.documentElement.clientWidth;
-  const screenH = document.documentElement.clientHeight;
+  const screenW = Math.min(document.documentElement.clientWidth, document.body.clientWidth);
+  const screenH = Math.min(document.documentElement.clientHeight, document.body.clientHeight);
   let x = 0;
   let y = 0;
   x = Math.random()*screenW + xStart;
@@ -29,6 +29,7 @@ function renderCircle({x,y}) {
 
 function onClickShootMe(event) {
   removeCircle();
+  shootAudio();
   createCircle();
 }
 
@@ -73,6 +74,25 @@ function freshPage (request) {
       toggleImage(request.imageHide);
     }
   }
+}
+
+
+// 播放枪声
+function shootAudio() {
+  var audio = document.createElement('audio');
+  audio.src = 'http://p8ipkvlac.bkt.clouddn.com/Kar98K.mp3';
+  audio.autoplay = 'autoplay';
+  var onEndedFunc = null;
+  function onEnded (audio) {
+    return function () {
+      audio.removeEventListener('ended', onEndedFunc);
+      document.body.removeChild(audio);
+      audio = null;
+    }
+  }
+  onEndedFunc = onEnded(audio);
+  audio.addEventListener('ended', onEndedFunc);
+  document.body.appendChild(audio);
 }
 
 // 隐藏显示图片
