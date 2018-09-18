@@ -80,7 +80,7 @@ function freshPage (request) {
 // 播放枪声
 function shootAudio() {
   var audio = document.createElement('audio');
-  audio.src = 'http://p8ipkvlac.bkt.clouddn.com/Kar98K.mp3';
+  audio.src = 'https://hyn-1251008690.cos.ap-beijing.myqcloud.com/my-project/Kar98K.mp3';
   audio.autoplay = 'autoplay';
   var onEndedFunc = null;
   function onEnded (audio) {
