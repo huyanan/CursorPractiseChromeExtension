@@ -1,15 +1,24 @@
 'use strict';
 
-console.log('\'Allo \'Allo! Popup');
+// console.log('\'Allo \'Allo! Popup');
 var shootBtn = document.getElementById('shoot-button');
 var imageHide = document.getElementById('image-hide');
-var messageType = 'calculate';
+var vbaikeHide = document.getElementById('vbaike-hide');
+var messageType = 'normal';
+var shootMessageType = 'shoot';
+var vbaikeMessageType = 'vbaike'
 // var checked = window.localStorage.getItem('shoot');
 chrome.storage.sync.get('shoot', function (items) {
-  console.log(items);
+  // console.log(items);
   var shoot = items.shoot;
-  shootBtn.shoot = shoot;
+  shootBtn.checked = shoot;
   shootChange(shoot);
+});
+chrome.storage.sync.get('vbaike', function (items) {
+  // console.log(items);
+  var vbaike = items.vbaike || false;
+  vbaikeHide.checked = vbaike;
+  vbaikeHideChange(vbaike);
 });
 
 shootBtn.addEventListener('click', shootChange);
@@ -20,7 +29,7 @@ function shootChange() {
   chrome.storage.sync.set({
     'shoot': checked
   }, function (items) {
-    console.log(items);
+    // console.log(items);
   });
   sendMessage({
     shoot: checked
@@ -35,10 +44,10 @@ function sendMessage(data) {
       } else {
           // alert("response为空=>"+response);
         }
-    }); //end  sendMessage   
+    }); //end  sendMessage
   }); //end query
 }
-                   
+
 imageHide.addEventListener('click', onClickImageHide);
 function onClickImageHide() {
   var checked = imageHide.checked;
@@ -46,3 +55,19 @@ function onClickImageHide() {
     imageHide: checked
   });
 }
+
+// 隐藏v百科
+function vbaikeHideChange() {
+  var checked = vbaikeHide.checked;
+  chrome.storage.sync.set({
+    'vbaike': checked
+  }, function (items) {
+    // console.log(items);
+  });
+  sendMessage({
+    vbaike: checked
+  });
+
+  return true
+}
+vbaikeHide.addEventListener('click', vbaikeHideChange)

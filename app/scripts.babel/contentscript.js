@@ -1,6 +1,6 @@
 'use strict';
 
-console.log('\'Allo \'Allo! Content script');
+// console.log('\'Allo \'Allo! Content script');
 var circle = null;
 // 获取随机位置
 function getRandomPos(){
@@ -49,14 +49,21 @@ chrome.extension.onMessage.addListener(
     function(request, sender, sendResponse) {
         // alert("前端/后端/Popup收到");
         // console.log(request, sender);
-        freshPage(request);
+        if (request.shoot !== undefined) {
+          freshPage(request);
+        } else if (request.vbaike !== undefined) {
+          vbaikeHide(request);
+        }
+        // vbaikeHide(request);
         sendResponse('popup返回值');
     }
 );
 chrome.storage.sync.get('shoot', function (items) {
-  console.log(items);
   freshPage(items)
 });
+chrome.storage.sync.get('vbaike', function (items) {
+  vbaikeHide(items)
+})
 // createCircle();
 function freshPage (request) {
   if (request.shoot != undefined) {
@@ -108,4 +115,13 @@ function toggleImage(toggle) {
       image.style.display = 'inline-block';
     }
   }
+}
+
+// 隐藏v 百科
+function vbaikeHide(request) {
+  var display = request.vbaike?'none':'block'
+  document.getElementsByClassName('lemmaWgt-promotion-vbaike')[0].style.display = display
+  document.getElementsByClassName('lemmaWgt-promotion-rightPreciseAd')[0].style.display = display
+  document.getElementsByClassName('lemmaWgt-promotion-slide')[0].style.display = display
+  document.getElementById('side-share').style.display = display
 }
