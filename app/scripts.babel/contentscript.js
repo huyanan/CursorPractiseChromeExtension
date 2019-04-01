@@ -51,6 +51,8 @@ chrome.extension.onMessage.addListener(
         // console.log(request, sender);
         if (request.shoot !== undefined) {
           freshPage(request);
+        } else if (request.imageHide !== undefined) {
+          toggleImage(request.imageHide)
         } else if (request.vbaike !== undefined) {
           vbaikeHide(request);
         }
@@ -74,13 +76,13 @@ function freshPage (request) {
       removeCircle();
     }
   }
-  if (request.imageHide != undefined) {
-    if (request.imageHide) {
-      toggleImage(request.imageHide);
-    } else {
-      toggleImage(request.imageHide);
-    }
-  }
+  // if (request.imageHide != undefined) {
+  //   if (request.imageHide) {
+  //     toggleImage(request.imageHide);
+  //   } else {
+  //     toggleImage(request.imageHide);
+  //   }
+  // }
 }
 
 
