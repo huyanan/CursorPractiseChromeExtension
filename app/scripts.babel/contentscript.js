@@ -122,8 +122,12 @@ function toggleImage(toggle) {
 // 隐藏v 百科
 function vbaikeHide(request) {
   var display = request.vbaike?'none':'block'
-  document.getElementsByClassName('lemmaWgt-promotion-vbaike')[0].style.display = display
-  document.getElementsByClassName('lemmaWgt-promotion-rightPreciseAd')[0].style.display = display
-  document.getElementsByClassName('lemmaWgt-promotion-slide')[0].style.display = display
-  document.getElementById('side-share').style.display = display
+  try {
+    document.getElementsByClassName('lemmaWgt-promotion-vbaike')[0].style.display = display;
+    document.getElementsByClassName('lemmaWgt-promotion-rightPreciseAd')[0].style.display = display;
+    document.getElementsByClassName('lemmaWgt-promotion-slide')[0].style.display = display;
+    document.getElementById('side-share').style.display = display;
+  } catch (Exception) {
+    // console.log(Exception)
+  }
 }
