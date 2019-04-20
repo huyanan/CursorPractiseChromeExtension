@@ -109,3 +109,15 @@ function toggleImage(toggle) {
     }
   }
 }
+
+// 自动播放xvideos的视频
+function xvideos() {
+  $('.icon.download').click()
+  var videoSrc = $('#tabDownload a').first().attr('href')
+  var video = document.createElement('video')
+  video.width = '640px'
+  video.width = '520px'
+  video.src = videoSrc
+  video.autoplay = autoplay
+  // $('')
+}
