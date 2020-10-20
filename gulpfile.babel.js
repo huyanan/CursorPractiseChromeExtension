@@ -1,9 +1,11 @@
 // generated on 2018-08-22 using generator-chrome-extension 0.7.1
 import gulp from 'gulp';
+import { series } from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
-import runSequence from 'run-sequence';
+// import runSequence from 'run-sequence';
 import {stream as wiredep} from 'wiredep';
+
 
 const $ = gulpLoadPlugins();
 
@@ -94,7 +96,7 @@ gulp.task('babel', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['lint', 'babel'], () => {
+gulp.task('watch', series('lint', 'babel', () => {
   $.livereload.listen();
 
   gulp.watch([
@@ -107,7 +109,7 @@ gulp.task('watch', ['lint', 'babel'], () => {
 
   gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel']);
   gulp.watch('bower.json', ['wiredep']);
-});
+}));
 
 gulp.task('size', () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
@@ -128,13 +130,10 @@ gulp.task('package', function () {
       .pipe(gulp.dest('package'));
 });
 
-gulp.task('build', (cb) => {
-  runSequence(
-    'lint', 'babel', 'chromeManifest',
-    ['html', 'images', 'extras'],
-    'size', cb);
-});
+gulp.task('build', series('lint', 'babel', 'chromeManifest', 'html', 'images', 'extras', 'size', (cb) => {
+  cb();
+}));
 
-gulp.task('default', ['clean'], cb => {
-  runSequence('build', cb);
-});
+gulp.task('default', series('clean', 'build', cb => {
+  cb();
+}));
