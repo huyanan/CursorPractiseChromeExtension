@@ -1,3 +1,13 @@
+/*
+ * @Author: HuYanan
+ * @Date: 2022-08-17 13:51:19
+ * @LastEditTime: 2023-05-24 16:07:46
+ * @LastEditors: HuYanan
+ * @Description: 
+ * @Version: 0.0.1
+ * @FilePath: /CursorPractiseChromeExtension/app/scripts.babel/popup.js
+ * @Contributors: [HuYanan, other]
+ */
 'use strict';
 
 // console.log('\'Allo \'Allo! Popup');
@@ -12,13 +22,18 @@ chrome.storage.sync.get('shoot', function (items) {
   // console.log(items);
   var shoot = items.shoot;
   shootBtn.checked = shoot;
-  shootChange(shoot);
+  // shootChange(shoot);
 });
 chrome.storage.sync.get('vbaike', function (items) {
   // console.log(items);
   var vbaike = items.vbaike || false;
   vbaikeHide.checked = vbaike;
-  vbaikeHideChange(vbaike);
+  // vbaikeHideChange(vbaike);
+});
+chrome.storage.sync.get('imageHide', (items) => {
+  console.log('imageHide', items);
+  var imageHideChecked = items.imageHide || false;
+  imageHide.checked = imageHideChecked;
 });
 
 shootBtn.addEventListener('click', shootChange);
@@ -51,6 +66,11 @@ function sendMessage(data) {
 imageHide.addEventListener('click', onClickImageHide);
 function onClickImageHide() {
   var checked = imageHide.checked;
+  chrome.storage.sync.set({
+    'imageHide': checked
+  }, function (items) {
+    // console.log(items);
+  });
   sendMessage({
     imageHide: checked
   });

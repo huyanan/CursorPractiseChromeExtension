@@ -1,3 +1,13 @@
+/*
+ * @Author: HuYanan
+ * @Date: 2022-08-17 13:51:19
+ * @LastEditTime: 2023-05-24 16:03:51
+ * @LastEditors: HuYanan
+ * @Description: 
+ * @Version: 0.0.1
+ * @FilePath: /CursorPractiseChromeExtension/app/scripts.babel/chromereload.js
+ * @Contributors: [HuYanan, other]
+ */
 'use strict';
 
 // Reload client for Chrome Apps & Extensions.
@@ -24,10 +34,13 @@ connection.onmessage = e => {
     if (data && data.command === 'reload') {
       var currentTime = Date.now();
       if (lastReload && currentTime - lastReload > 60000) {
-	// don't reload more than once a minute
-	chrome.runtime.reload();
-	chrome.developerPrivate.reload(chrome.runtime.id, 
-				       {failQuietly: true});
+        // don't reload more than once a minute
+        if (chrome.runtime) {
+          chrome.runtime.reload();
+        }
+        if (chrome.developerPrivate) {
+          chrome.developerPrivate.reload(chrome.runtime.id, {failQuietly: true});
+        }
       }
     }
   }

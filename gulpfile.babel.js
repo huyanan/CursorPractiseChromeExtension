@@ -107,8 +107,8 @@ gulp.task('watch', series('lint', 'babel', () => {
     'app/_locales/**/*.json'
   ]).on('change', $.livereload.reload);
 
-  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel']);
-  gulp.watch('bower.json', ['wiredep']);
+  gulp.watch('app/scripts.babel/**/*.js', series('lint', 'babel'));
+  gulp.watch('bower.json', series('wiredep'));
 }));
 
 gulp.task('size', () => {

@@ -6,6 +6,7 @@
   },
   "scripts": {
     "ready": "yarn install",
+    "dev": "./node_modules/gulp-cli/bin/gulp.js watch",
     "build": "./node_modules/gulp-cli/bin/gulp.js"
   },
   "devDependencies": {

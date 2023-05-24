@@ -2,6 +2,7 @@
 
 // console.log('\'Allo \'Allo! Content script');
 var circle = null;
+var fly = null;
 // 获取随机位置
 function getRandomPos(){
   const xStart = window.scrollX;
@@ -26,15 +27,31 @@ function renderCircle({x,y}) {
   circle.addEventListener('click', onClickShootMe);
   document.body.appendChild(circle);
 }
+// 整个苍蝇
+function renderFly({x,y}) {
+  fly = document.createElement('img');
+  fly.className = 'fly';
+  fly.src = 'https://cdn.huyanan.site/296cd4c3216a4b35b834c948e3333556.jpeg';
+  fly.style.position = 'absolute';
+  fly.style.left = x + 'px';
+  fly.style.top = y + 'px';
+  fly.addEventListener('click', onClickShootMe);
+  document.body.appendChild(fly);
+}
 
 function onClickShootMe(event) {
   removeCircle();
+  removeFly();
   shootAudio();
   createCircle();
+  // createFly();
 }
 
 function createCircle() {
   renderCircle(getRandomPos());
+}
+function createFly() {
+  renderFly(getRandomPos());
 }
 function removeCircle() {
   if (!circle) {
@@ -44,11 +61,18 @@ function removeCircle() {
   circle.parentNode.removeChild(circle);
   circle = null;
 }
+function removeFly() {
+  if (!fly) {
+    return;
+  }
+  fly.removeEventListener('click', onClickShootMe);
+  fly.parentNode.removeChild(fly);
+  fly = null;
+}
+
 
 chrome.extension.onMessage.addListener(
     function(request, sender, sendResponse) {
-        // alert("前端/后端/Popup收到");
-        // console.log(request, sender);
         if (request.shoot !== undefined) {
           freshPage(request);
         } else if (request.imageHide !== undefined) {
@@ -56,7 +80,6 @@ chrome.extension.onMessage.addListener(
         } else if (request.vbaike !== undefined) {
           vbaikeHide(request);
         }
-        // vbaikeHide(request);
         sendResponse('popup返回值');
     }
 );
@@ -66,6 +89,12 @@ chrome.storage.sync.get('shoot', function (items) {
 chrome.storage.sync.get('vbaike', function (items) {
   vbaikeHide(items)
 })
+chrome.storage.sync.get('imageHide', (items) => {
+  toggleImage(items.imageHide)
+  window.addEventListener('load', () => {
+    toggleImage(items.imageHide)
+  })
+});
 // createCircle();
 function freshPage (request) {
   if (request.shoot != undefined) {
@@ -76,13 +105,6 @@ function freshPage (request) {
       removeCircle();
     }
   }
-  // if (request.imageHide != undefined) {
-  //   if (request.imageHide) {
-  //     toggleImage(request.imageHide);
-  //   } else {
-  //     toggleImage(request.imageHide);
-  //   }
-  // }
 }
 
 
