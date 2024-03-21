@@ -127,6 +127,21 @@ function shootAudio() {
   document.body.appendChild(audio);
 }
 
+// 动态创建的图片可能在页面加载后出现，所以我们监听DOM变化，并隐藏新创建的图片
+const observer = new MutationObserver(mutations => {
+  mutations.forEach(mutation => {
+    if (mutation.type === 'childList') {
+      mutation.addedNodes.forEach(node => {
+        if (node.tagName === 'IMG') {
+          node.style.display = 'none';
+        }
+      });
+    }
+  });
+});
+
+
+
 // 隐藏显示图片
 function toggleImage(toggle) {
   var images = document.getElementsByTagName('img');
@@ -138,6 +153,11 @@ function toggleImage(toggle) {
     } else {
       image.style.display = 'inline-block';
     }
+  }
+  if (toggle) {
+    observer.observe(document.body, { childList: true, subtree: true });
+  } else {
+    observer.disconnect()
   }
 }
 
