@@ -92,6 +92,7 @@ chrome.storage.sync.get('vbaike', function (items) {
 chrome.storage.sync.get('imageHide', (items) => {
   toggleImage(items.imageHide)
   window.addEventListener('load', () => {
+    insertCSS();
     toggleImage(items.imageHide)
   })
 });
@@ -150,8 +151,20 @@ function toggleImage(toggle) {
     image = images[i];
     if (toggle) {
       image.style.display = 'none';
+      image.style.opacity = 0;
+      image.dataset.height = image.style.height;
+      image.style.height = '0'
+      image.style.visibility = 'hidden'
+      image.dataset.src = image.src
+      image.src=''
+      image.classList.add('hide')
     } else {
       image.style.display = 'inline-block';
+      image.style.opacity = 1;
+      image.style.height = image.dataset.height
+      image.style.visibility = 'inital'
+      image.src = image.dataset.src
+      image.classList.remove('hide')
     }
   }
   if (toggle) {
@@ -159,6 +172,22 @@ function toggleImage(toggle) {
   } else {
     observer.disconnect()
   }
+}
+
+// 注入class
+function insertCSS () {
+  // 创建一个style元素
+  var style = document.createElement('style');
+  
+  // 设置style内容
+  style.innerHTML = `
+    .hide {
+      display: none !important;
+    }
+  `;
+  
+  // 将style元素插入到head中
+  document.head.appendChild(style);
 }
 
 // 自动播放xvideos的视频
