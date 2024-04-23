@@ -163,8 +163,10 @@ function toggleImage(toggle) {
       image.style.opacity = 1;
       if (image.dataset.height) {
         image.style.height = image.dataset.height
+      } else {
+        image.style.height = ''
       }
-      image.style.visibility = 'inital'
+      image.style.visibility = 'initial'
       if (image.dataset.src) {
         image.src = image.dataset.src
       }
