@@ -161,9 +161,13 @@ function toggleImage(toggle) {
     } else {
       image.style.display = 'inline-block';
       image.style.opacity = 1;
-      image.style.height = image.dataset.height
+      if (image.dataset.height) {
+        image.style.height = image.dataset.height
+      }
       image.style.visibility = 'inital'
-      image.src = image.dataset.src
+      if (image.dataset.src) {
+        image.src = image.dataset.src
+      }
       image.classList.remove('hide')
     }
   }
