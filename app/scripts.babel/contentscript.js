@@ -152,8 +152,8 @@ function toggleImage(toggle) {
     if (toggle) {
       image.style.display = 'none';
       image.style.opacity = 0;
-      image.dataset.height = image.style.height;
-      image.style.height = '0'
+      // image.dataset.height = image.style.height;
+      // image.style.height = '0'
       image.style.visibility = 'hidden'
       image.dataset.src = image.src
       image.src=''
@@ -161,11 +161,11 @@ function toggleImage(toggle) {
     } else {
       image.style.display = 'inline-block';
       image.style.opacity = 1;
-      if (image.dataset.height) {
-        image.style.height = image.dataset.height
-      } else {
-        image.style.height = ''
-      }
+      // if (image.dataset.height) {
+      //   image.style.height = image.dataset.height
+      // } else {
+      //   image.style.height = ''
+      // }
       image.style.visibility = 'initial'
       if (image.dataset.src) {
         image.src = image.dataset.src
