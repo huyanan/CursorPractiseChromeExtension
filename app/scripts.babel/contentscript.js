@@ -90,10 +90,14 @@ chrome.storage.sync.get('vbaike', function (items) {
   vbaikeHide(items)
 })
 chrome.storage.sync.get('imageHide', (items) => {
-  toggleImage(items.imageHide)
+  if (items.imageHide) {
+    toggleImage(items.imageHide)
+  }
   window.addEventListener('load', () => {
     insertCSS();
-    toggleImage(items.imageHide)
+    if (items.imageHide) {
+      toggleImage(items.imageHide)
+    }
   })
 });
 // createCircle();
