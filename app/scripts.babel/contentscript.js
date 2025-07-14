@@ -24,6 +24,7 @@ function renderCircle({x,y}) {
   circle.style.position = 'absolute';
   circle.style.left = x+'px';
   circle.style.top = y+'px';
+  circle.style.zIndex = 9999;
   circle.addEventListener('click', onClickShootMe);
   document.body.appendChild(circle);
 }
