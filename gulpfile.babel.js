@@ -14,12 +14,28 @@ gulp.task('extras', () => {
     'app/*.*',
     'app/_locales/**',
     '!app/scripts.babel',
+    '!app/scripts',
+    '!app/styles',
     '!app/*.json',
     '!app/*.html',
   ], {
     base: 'app',
     dot: true
   }).pipe(gulp.dest('dist'));
+});
+
+gulp.task('styles', () => {
+  return gulp.src('app/styles/**/*.css')
+    .pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
+    .pipe(gulp.dest('dist/styles'));
+});
+
+gulp.task('scripts', () => {
+  return gulp.src('app/scripts/**/*.js')
+    .pipe($.if('*.js', $.sourcemaps.init()))
+    .pipe($.if('*.js', $.uglify()))
+    .pipe($.if('*.js', $.sourcemaps.write('.')))
+    .pipe(gulp.dest('dist/scripts'));
 });
 
 function lint(files, options) {
@@ -69,21 +85,10 @@ gulp.task('html',  () => {
 });
 
 gulp.task('chromeManifest', () => {
+  // Manifest V3 uses service_worker instead of scripts array,
+  // so we just copy the manifest.json directly
   return gulp.src('app/manifest.json')
-    .pipe($.chromeManifest({
-      buildnumber: true,
-      background: {
-        target: 'scripts/background.js',
-        exclude: [
-          'scripts/chromereload.js'
-        ]
-      }
-  }))
-  .pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
-  .pipe($.if('*.js', $.sourcemaps.init()))
-  .pipe($.if('*.js', $.uglify()))
-  .pipe($.if('*.js', $.sourcemaps.write('.')))
-  .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('babel', () => {
@@ -130,7 +135,7 @@ gulp.task('package', function () {
       .pipe(gulp.dest('package'));
 });
 
-gulp.task('build', series('lint', 'babel', 'chromeManifest', 'html', 'images', 'extras', 'size', (cb) => {
+gulp.task('build', series('lint', 'babel', 'chromeManifest', 'scripts', 'styles', 'html', 'images', 'extras', 'size', (cb) => {
   cb();
 }));
 
